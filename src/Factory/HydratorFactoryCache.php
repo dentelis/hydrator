@@ -2,17 +2,17 @@
 
 namespace Dentelis\Hydrator\Factory;
 
-class DTOFactoryCache
+class HydratorFactoryCache
 {
     /**
-     * @var DTOFactory[]
+     * @var HydratorFactory[]
      */
     static private array $factoryCache = [];
 
-    static public function getFactory(string $className): DTOFactory
+    static public function getFactory(string $className): HydratorFactory
     {
         if (!isset(static::$factoryCache[$className])) {
-            static::$factoryCache[$className] = new DTOFactory($className);
+            static::$factoryCache[$className] = new HydratorFactory($className);
         }
         return static::$factoryCache[$className];
     }

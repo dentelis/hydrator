@@ -2,11 +2,11 @@
 
 namespace tests\unit\Factory\ComplexObjects\_testObjects;
 
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 
 class TitleContentData
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     function __construct(public string $text)
     {

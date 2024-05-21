@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace tests\unit\Factory\ArrayFlatHomogeneous;
 
 use Dentelis\Hydrator\Exception\RequiredArgumentException;
-use Dentelis\Hydrator\Factory\DTOFactory;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactory;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -16,8 +16,8 @@ use tests\unit\Factory\_traits\CheckObjectTrait;
 use tests\unit\Factory\ArrayFlatHomogeneous\DTO\DTOArrayHomogeneousWithConstructor;
 
 #[
-    CoversClass(DTOFactory::class),
-    CoversClass(DTOFactoryTrait::class),
+    CoversClass(HydratorFactory::class),
+    CoversClass(HydratorFactoryTrait::class),
 ]
 final class FactoryArrayFlatWithConstructorTest extends TestCase
 {
@@ -65,7 +65,7 @@ final class FactoryArrayFlatWithConstructorTest extends TestCase
     {
 
         $this->expectException(RequiredArgumentException::class);
-        DTOArrayHomogeneousWithConstructor::getFactory()->createObject($jsonData);
+        DTOArrayHomogeneousWithConstructor::getHydratorFactory()->createObject($jsonData);
 
     }
 

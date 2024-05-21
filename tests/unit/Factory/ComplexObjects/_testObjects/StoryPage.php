@@ -3,11 +3,11 @@
 namespace tests\unit\Factory\ComplexObjects\_testObjects;
 
 use Dentelis\Hydrator\Attribute\ArrayTypeOf;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 
 class StoryPage
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     // указание тут ArrayTypeOf - ключевой момент для сборки
     #[

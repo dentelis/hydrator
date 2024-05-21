@@ -4,18 +4,18 @@ declare(strict_types=1);
 namespace tests\unit\Factory\Datetime;
 
 use DateTime;
-use Dentelis\Hydrator\Factory\DTOFactory;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
-use Dentelis\Hydrator\Factory\DTOFactoryTraitInterface;
+use Dentelis\Hydrator\Factory\HydratorFactory;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTraitInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use tests\unit\Factory\Datetime\Objects\DTODatetimeWithConstructor;
+use tests\unit\Factory\Datetime\Objects\HydratorDatetimeWithConstructor;
 
 
 #[
-    CoversClass(DTOFactory::class),
-    CoversClass(DTOFactoryTrait::class),
+    CoversClass(HydratorFactory::class),
+    CoversClass(HydratorFactoryTrait::class),
 ]
 final class DTOFactoryDatetimeTest extends TestCase
 {
@@ -29,7 +29,7 @@ final class DTOFactoryDatetimeTest extends TestCase
                     'dateTimeRequired' => (object)['datetime' => '2023-10-01 10:15:00'],
                     'dateTimeNullable' => null,
                 ],
-                'instance' => new DTODatetimeWithConstructor(
+                'instance' => new HydratorDatetimeWithConstructor(
                     'title',
                     new DateTime('2023-10-01 10:15:00'),
                     null,
@@ -41,7 +41,7 @@ final class DTOFactoryDatetimeTest extends TestCase
                     'dateTimeRequired' => (object)['datetime' => '2023-10-01 10:15:00'],
                     #'dateTimeNullable' => null, //optional
                 ],
-                'instance' => new DTODatetimeWithConstructor(
+                'instance' => new HydratorDatetimeWithConstructor(
                     'title',
                     new DateTime('2023-10-01 10:15:00'),
                     null,
@@ -53,7 +53,7 @@ final class DTOFactoryDatetimeTest extends TestCase
                     'dateTimeRequired' => '2023-10-01 10:15:55',
                     'dateTimeNullable' => '2023-10-01 10:30:11',
                 ],
-                'instance' => new DTODatetimeWithConstructor(
+                'instance' => new HydratorDatetimeWithConstructor(
                     'title',
                     new DateTime('2023-10-01 10:15:55'),
                     new DateTime('2023-10-01 10:30:11'),
@@ -65,7 +65,7 @@ final class DTOFactoryDatetimeTest extends TestCase
                     'dateTimeRequired' => '2023-10-01 10:15:55',
                     'dateTimeNullable' => '2023-10-01 10:30:11',
                 ],
-                'instance' => new DTODatetimeWithConstructor(
+                'instance' => new HydratorDatetimeWithConstructor(
                     'title',
                     new DateTime('2023-10-01 10:15:55'),
                     new DateTime('2023-10-01 10:30:11'),
@@ -77,7 +77,7 @@ final class DTOFactoryDatetimeTest extends TestCase
                     'dateTimeRequired' => '2023-10-01 10:15:55',
                     'dateTimeNullable' => '2023-10-01 10:30:11',
                 ],
-                'instance' => new DTODatetimeWithConstructor(
+                'instance' => new HydratorDatetimeWithConstructor(
                     'title',
                     new DateTime('2023-10-01 10:15:55'),
                     new DateTime('2023-10-01 10:30:11'),
@@ -89,7 +89,7 @@ final class DTOFactoryDatetimeTest extends TestCase
                     'dateTimeRequired' => '2023-10-01 10:15:55',
                     'dateTimeNullable' => '2023-10-01 10:30:11',
                 ],
-                'instance' => new DTODatetimeWithConstructor(
+                'instance' => new HydratorDatetimeWithConstructor(
                     'title',
                     new DateTime('2023-10-01 10:15:55'),
                     new DateTime('2023-10-01 10:30:11'),
@@ -102,13 +102,13 @@ final class DTOFactoryDatetimeTest extends TestCase
     #[
         DataProvider('datetimeProvider')
     ]
-    public function testDatetime(object $json, DTOFactoryTraitInterface $instance): void
+    public function testDatetime(object $json, HydratorFactoryTraitInterface $instance): void
     {
 
         /**
-         * @var DTOFactoryTraitInterface $instance
+         * @var HydratorFactoryTraitInterface $instance
          */
-        $newInstance = $instance::getFactory()->createObject($json);
+        $newInstance = $instance::getHydratorFactory()->createObject($json);
         $this->assertEqualsCanonicalizing($instance, $newInstance);
 
     }

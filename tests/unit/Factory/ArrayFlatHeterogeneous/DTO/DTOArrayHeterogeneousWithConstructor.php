@@ -3,13 +3,13 @@
 namespace tests\unit\Factory\ArrayFlatHeterogeneous\DTO;
 
 use Dentelis\Hydrator\Attribute\ArrayTypeOf;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use tests\unit\Factory\ArrayFlatHeterogeneous\DTO\Objects\CarDTO;
 use tests\unit\Factory\ArrayFlatHeterogeneous\DTO\Objects\DriverDTO;
 
 class DTOArrayHeterogeneousWithConstructor
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     /**
      * @param CarDTO[]|DriverDTO[] $objects

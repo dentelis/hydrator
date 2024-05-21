@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory\_traits;
 
-use Dentelis\Hydrator\Factory\DTOFactoryTraitInterface;
+use Dentelis\Hydrator\Factory\HydratorFactoryTraitInterface;
 use PHPUnit\Framework\TestCase;
 
 trait CheckObjectTrait
@@ -12,7 +12,7 @@ trait CheckObjectTrait
     protected function checkObject(object $instance): void
     {
         /**
-         * @var DTOFactoryTraitInterface $instance
+         * @var HydratorFactoryTraitInterface $instance
          * @var TestCase $this
          */
         $jsonData = json_decode(json_encode($instance));
@@ -21,7 +21,7 @@ trait CheckObjectTrait
         $newInstance = $instance::createHydratedObject($jsonData);
         $this->assertEqualsCanonicalizing($instance, $newInstance);
 
-        $newInstance = $instance::getFactory()->createObject($jsonData);
+        $newInstance = $instance::getHydratorFactory()->createObject($jsonData);
         $this->assertEqualsCanonicalizing($instance, $newInstance);
     }
 

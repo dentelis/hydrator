@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace tests\unit\Factory\ArrayFlatHomogeneous;
 
 use Dentelis\Hydrator\Exception\RequiredArgumentException;
-use Dentelis\Hydrator\Factory\DTOFactory;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactory;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -18,8 +18,8 @@ use tests\unit\Factory\ArrayFlatHomogeneous\DTO\DTOArrayHomogeneousUntypedEnumsW
 use tests\unit\Factory\ArrayFlatHomogeneous\DTO\DTOArrayHomogeneousWithoutConstructor;
 
 #[
-    CoversClass(DTOFactory::class),
-    CoversClass(DTOFactoryTrait::class),
+    CoversClass(HydratorFactory::class),
+    CoversClass(HydratorFactoryTrait::class),
 ]
 final class FactoryArrayFlatWithoutConstructorTest extends TestCase
 {
@@ -68,7 +68,7 @@ final class FactoryArrayFlatWithoutConstructorTest extends TestCase
 
         $jsonData = (object)['untypedEnums' => ['GREEN']];
 
-        $newInstance = $instance::getFactory()->createObject($jsonData);
+        $newInstance = $instance::getHydratorFactory()->createObject($jsonData);
 
         $this->assertEqualsCanonicalizing($instance, $newInstance);
     }
@@ -77,7 +77,7 @@ final class FactoryArrayFlatWithoutConstructorTest extends TestCase
     public function testException(object $jsonData): void
     {
         $this->expectException(RequiredArgumentException::class);
-        DTOArrayHomogeneousUntypedEnumsWithoutConstructor::getFactory()->createObject($jsonData);
+        DTOArrayHomogeneousUntypedEnumsWithoutConstructor::getHydratorFactory()->createObject($jsonData);
     }
 
 

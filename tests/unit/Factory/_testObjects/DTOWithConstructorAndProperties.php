@@ -2,13 +2,13 @@
 
 namespace tests\unit\Factory\_testObjects;
 
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use tests\unit\Factory\_testObjects\Enums\IntEnum;
 use tests\unit\Factory\_testObjects\Enums\StringEnum;
 
 class DTOWithConstructorAndProperties
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     public bool $isActive;
     public StringEnum $stringEnum;

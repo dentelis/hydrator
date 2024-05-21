@@ -3,13 +3,13 @@
 namespace tests\unit\Factory\Datetime\Objects;
 
 use DateTime;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
-use Dentelis\Hydrator\Factory\DTOFactoryTraitInterface;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTraitInterface;
 
-class DTODatetimeWithConstructor implements DTOFactoryTraitInterface
+class HydratorDatetimeWithConstructor implements HydratorFactoryTraitInterface
 {
 
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     public function __construct(
         public string    $title,

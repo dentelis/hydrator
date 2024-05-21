@@ -5,7 +5,7 @@ namespace Dentelis\Hydrator\Factory;
 use Dentelis\Hydrator\Exception\RequiredArgumentException;
 use Dentelis\Hydrator\Hydrator;
 
-class DTOFactory
+class HydratorFactory
 {
     function __construct(protected string $className)
     {
@@ -16,13 +16,12 @@ class DTOFactory
      * @param array $jsonDataArray массив объектов|массивов описывающих возвращаемые объекты
      * @return array
      */
-    public function createArray(array $jsonDataArray): array
+    public function createArray(array $jsonArray): array
     {
-        $result = [];
-        foreach ($jsonDataArray as $item) {
-            $result[] = $this->createObject($item);
-        }
-        return $result;
+        return Hydrator::createArrayFromData(
+            $this->className,
+            $jsonArray
+        );
     }
 
     /**

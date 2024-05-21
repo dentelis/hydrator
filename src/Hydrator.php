@@ -112,7 +112,7 @@ class Hydrator
                 if (!is_array($value)) {
                     throw new ArgumentTypeException($param->title . " must be an array");
                 }
-                return self::createArrayFromData($param->argType, $value, $param->reflection);
+                return self::_createArrayFromData($param->argType, $value, $param->reflection);
         }
     }
 
@@ -145,6 +145,8 @@ class Hydrator
      * @param mixed $jsonData данные в json формате
      * @return object
      * @throws ReflectionException
+     * @todo почему тут $className не может быть массивом - логично все перечисления убрать сюда и выровнять сигнатуру с createArrayFromData
+     * @deprecated
      */
     public static function createObjectFromData(string $className, object $jsonData): object
     {
@@ -161,19 +163,31 @@ class Hydrator
         );
     }
 
+
+    public static function createArrayFromData(string $targetClassArr, array $jsonDataArray): array
+    {
+        $result = [];
+        foreach ($jsonDataArray as $item) {
+            $result[] = self::createObjectFromData($targetClassArr, $item);
+        }
+        return $result;
+    }
+
+
     /**
+     * @todo странный класс, надо бы переделать на createArrayFromDefinition
+     * @deprecated
      * @todo внедрить нормальную ошибку если не удается создать enum
      * @todo переиспользовать эту функцию чтобы не было дублирования кода
      * @todo как грязная идея - сделать фейковый definition из объекта с массивом с одним типом, заюзать основную функцию и потом вывести свойство
      */
-    public static function createArrayFromData(string|array $targetClassArr, array $jsonData, ReflectionParameter|ReflectionProperty $reflection): array
+    protected static function _createArrayFromData(string|array $targetClassArr, array $jsonData, ReflectionParameter|ReflectionProperty $reflection): array
     {
         $result = [];
 
         if (is_array($targetClassArr)) {
             //попытка угадать тип массива
 
-            //@todo абзац ниже можно заменить на каунтер, будет сильно быстрее
             $targetClassArr = (is_array($targetClassArr)) ? $targetClassArr : [$targetClassArr];
             $definitionTypes = [];
             foreach ($targetClassArr as $targetClass) {
@@ -187,7 +201,7 @@ class Hydrator
                     try {
                         $tmp = self::_createArrItem($definitionType, $targetClass, $item, $reflection);
                     } catch (Throwable $e) {
-                        if ($targetClass == $lastClass) {
+                        if ($targetClass === $lastClass) {
                             throw $e;
                         } else {
                             continue; //не надо писать в result

@@ -2,11 +2,11 @@
 
 namespace tests\unit\Factory\_testObjects;
 
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 
 class DTOWithConstructorAndLogic
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     public string $title;
 

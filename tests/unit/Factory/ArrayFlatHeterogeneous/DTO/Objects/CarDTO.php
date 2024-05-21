@@ -2,11 +2,11 @@
 
 namespace tests\unit\Factory\ArrayFlatHeterogeneous\DTO\Objects;
 
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 
 class CarDTO
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     function __construct(
         public string    $model,

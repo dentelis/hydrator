@@ -3,18 +3,18 @@
 namespace Dentelis\Hydrator\Factory;
 
 /**
- * @implements DTOFactoryTraitInterface
+ * @implements HydratorFactoryTraitInterface
  */
-trait DTOFactoryTrait
+trait HydratorFactoryTrait
 {
-    static public function getFactory(): DTOFactory
+    static public function getHydratorFactory(): HydratorFactory
     {
         //мы используем DTOFactoryCache чтобы у нас был единый реестр DTO фабрик, не важно из какого класса он вызван
-        return DTOFactoryCache::getFactory(static::class);
+        return HydratorFactoryCache::getFactory(static::class);
     }
 
     public static function createHydratedObject(mixed $data): static {
-        return static::getFactory()->createObject($data);
+        return static::getHydratorFactory()->createObject($data);
     }
 
 }

@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory\Objects;
 
-use Dentelis\Hydrator\Factory\DTOFactory;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactory;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use tests\unit\Factory\_testObjects\DTOWithConstructorAndLogic;
 use tests\unit\Factory\_traits\CheckObjectTrait;
 
 #[
-    CoversClass(DTOFactory::class),
-    CoversClass(DTOFactoryTrait::class),
+    CoversClass(HydratorFactory::class),
+    CoversClass(HydratorFactoryTrait::class),
 ]
 final class SimpleWithConstructorAndLogicTest extends TestCase
 {
@@ -27,7 +27,7 @@ final class SimpleWithConstructorAndLogicTest extends TestCase
 
         $jsonData = (object)['title' => 'John'];
 
-        $newInstance = $instance::getFactory()->createObject($jsonData);
+        $newInstance = $instance::getHydratorFactory()->createObject($jsonData);
 
         $this->assertEqualsCanonicalizing($instance, $newInstance);
     }

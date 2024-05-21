@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory;
 
-use Dentelis\Hydrator\Factory\DTOFactory;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactory;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use tests\unit\Factory\_testObjects\DTODefaultValuesWithoutConstructor;
 use tests\unit\Factory\_traits\CheckObjectTrait;
 
 #[
-    CoversClass(DTOFactory::class),
-    CoversClass(DTOFactoryTrait::class),
+    CoversClass(HydratorFactory::class),
+    CoversClass(HydratorFactoryTrait::class),
 ]
 final class FactoryDefaultValuesTest extends TestCase
 {

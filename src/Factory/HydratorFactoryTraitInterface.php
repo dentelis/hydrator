@@ -2,8 +2,8 @@
 
 namespace Dentelis\Hydrator\Factory;
 
-interface DTOFactoryTraitInterface
+interface HydratorFactoryTraitInterface
 {
-    static public function getFactory(): DTOFactory;
+    static public function getHydratorFactory(): HydratorFactory;
     public static function createHydratedObject(mixed $data): static;
 }

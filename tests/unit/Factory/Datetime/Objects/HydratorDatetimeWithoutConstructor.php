@@ -3,12 +3,12 @@
 namespace tests\unit\Factory\Datetime\Objects;
 
 use DateTime;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
-use Dentelis\Hydrator\Factory\DTOFactoryTraitInterface;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTraitInterface;
 
-class DTODatetimeWithoutConstructor implements DTOFactoryTraitInterface
+class HydratorDatetimeWithoutConstructor implements HydratorFactoryTraitInterface
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     public string $title;
     public DateTime $dateTimeRequired;

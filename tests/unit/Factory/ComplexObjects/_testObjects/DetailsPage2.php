@@ -2,11 +2,11 @@
 
 namespace tests\unit\Factory\ComplexObjects\_testObjects;
 
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 
 class DetailsPage2
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     public string $title;
     public TextContent|ImageContent|TitleContent $content;

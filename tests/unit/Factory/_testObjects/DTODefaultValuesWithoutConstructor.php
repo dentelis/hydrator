@@ -3,13 +3,13 @@
 namespace tests\unit\Factory\_testObjects;
 
 use Dentelis\Hydrator\Attribute\ArrayTypeOf;
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use tests\unit\Factory\_testObjects\Enums\IntEnum;
 use tests\unit\Factory\_testObjects\Enums\StringEnum;
 
 class DTODefaultValuesWithoutConstructor
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     public string $emptyString = '';
     public string $nonEmptyString = 'abc';

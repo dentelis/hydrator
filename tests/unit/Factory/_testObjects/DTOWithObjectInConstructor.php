@@ -2,12 +2,12 @@
 
 namespace tests\unit\Factory\_testObjects;
 
-use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\HydratorFactoryTrait;
 use tests\unit\Factory\_testObjects\Enums\StringEnum;
 
 class DTOWithObjectInConstructor
 {
-    use DTOFactoryTrait;
+    use HydratorFactoryTrait;
 
     function __construct(
         public string             $title,

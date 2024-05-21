@@ -1,6 +1,6 @@
 {
-  "name": "dentelis/php-hydrator",
-  "description": "Extremely fast object and array hydrator with strict type matching",
+  "name": "dentelis/hydrator",
+  "description": "Extremely fast object and array php hydrator with strict type matching, array typings, enums, and union types",
   "license": "MIT",
   "authors": [
     {
@@ -18,7 +18,7 @@
     "object conversion"
   ],
   "support": {
-    "issues": "https://github.com/dentelis/php-hydrator/issues"
+    "issues": "https://github.com/dentelis/hydrator/issues"
   },
   "type": "library",
   "require": {

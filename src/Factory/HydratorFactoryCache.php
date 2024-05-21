@@ -12,9 +12,9 @@ class HydratorFactoryCache
 
     static public function getFactory(string $className): HydratorFactory
     {
-        if (!isset(static::$factoryCache[$className])) {
-            static::$factoryCache[$className] = new HydratorFactory($className);
+        if (!isset(self::$factoryCache[$className])) {
+            self::$factoryCache[$className] = new HydratorFactory($className);
         }
-        return static::$factoryCache[$className];
+        return self::$factoryCache[$className];
     }
 }

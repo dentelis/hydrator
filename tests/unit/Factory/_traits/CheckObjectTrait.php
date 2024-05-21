@@ -16,8 +16,12 @@ trait CheckObjectTrait
          * @var TestCase $this
          */
         $jsonData = json_decode(json_encode($instance));
-        $newInstance = $instance::getFactory()->createObject($jsonData);
 
+        //we have 2 ways to create object
+        $newInstance = $instance::createHydratedObject($jsonData);
+        $this->assertEqualsCanonicalizing($instance, $newInstance);
+
+        $newInstance = $instance::getFactory()->createObject($jsonData);
         $this->assertEqualsCanonicalizing($instance, $newInstance);
     }
 

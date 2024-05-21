@@ -16,7 +16,7 @@ use tests\unit\Factory\_traits\CheckObjectTrait;
     CoversClass(DTOFactory::class),
     CoversClass(DTOFactoryTrait::class),
 ]
-final class SimpleWithoutConstructorTest extends TestCase
+final class  SimpleWithoutConstructorTest extends TestCase
 {
     use CheckObjectTrait;
 

@@ -1,5 +1,7 @@
 # dentelis/hydrator
-Extremely fast object and array php hydrator with strict type matching, array typings, enums, union types, etc
+Extremely fast php object and array hydrator with strict type matching, array typing, enums and type unions.
+
+Converts simple data (obtained from json_decode or elsewhere) into objects/arrays of objects with strict typing.
 
 ## Pros
  - really fast (add proofs!)

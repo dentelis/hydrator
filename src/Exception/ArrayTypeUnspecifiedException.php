@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Dentelis\Hydrator\Exception;
 
+use Exception;
 use ReflectionParameter;
 use ReflectionProperty;
 
-class ArrayTypeUnspecifiedException extends \Exception
+class ArrayTypeUnspecifiedException extends Exception
 {
     function __construct(ReflectionParameter|ReflectionProperty $param)
     {

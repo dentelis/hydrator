@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Dentelis\Hydrator\Exception;
 
+use Exception;
 use ReflectionParameter;
 use ReflectionProperty;
 
@@ -10,7 +11,7 @@ use ReflectionProperty;
  * @deprecated
  * @todo разбить на более понятные исключения
  */
-class RequiredArgumentException extends \Exception
+class RequiredArgumentException extends Exception
 {
     function __construct(ReflectionParameter|ReflectionProperty $param)
     {

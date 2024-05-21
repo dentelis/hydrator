@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Dentelis\Hydrator;
 
@@ -21,6 +22,41 @@ use ValueError;
  */
 class Hydrator
 {
+
+    public static function createArrayFromData(string $targetClassArr, array $jsonDataArray): array
+    {
+        $result = [];
+        foreach ($jsonDataArray as $item) {
+            $result[] = self::createObjectFromData($targetClassArr, $item);
+        }
+        return $result;
+    }
+
+    /**
+     * Создает класс из переданных данных
+     * Корректно обрабатывает как переменные конструктора, так и свойства класса (должны быть или публичными или явно поддерживаться через __set)
+     * Корректно обрабатывает вложенные классы, enum, массивы
+     * @param string $className
+     * @param mixed $jsonData данные в json формате
+     * @return object
+     * @throws ReflectionException
+     * @todo почему тут $className не может быть массивом - логично все перечисления убрать сюда и выровнять сигнатуру с createArrayFromData
+     * @deprecated
+     */
+    public static function createObjectFromData(string $className, object $jsonData): object
+    {
+        //особые кейсы встроенных классов
+        //@todo подумать как реализовать встроенные классы типа DateTime
+        if ($className === 'DateTime' && !empty($jsonData->scalar)) {
+            return new DateTime($jsonData->scalar);
+        }
+
+
+        return self::createObjectFromDefinition(
+            Definition\DefinitionGenerator::getClassDefinition($className),
+            $jsonData
+        );
+    }
 
     protected static function createObjectFromDefinition(ClassDefinition $classDefinition, object $jsonData): object
     {
@@ -123,6 +159,26 @@ class Hydrator
     }
 
     /**
+     * Конвертирует строку в нужный тип
+     * @param string $data
+     * @param string $targetType
+     * @return mixed
+     */
+    protected static function convertMixed(mixed $data, string $targetType): mixed
+    {
+        //@todo написать преобразователь array
+        //@todo кидать ошибку если это object/ resource / unknown type / null  https://www.php.net/manual/ru/function.gettype.php
+        //@todo поддерживать некоторые стандартные object, например DateTime
+        return match ($targetType) {
+            'boolean', 'bool' => ((is_string($data) && strtolower($data) === 'true') || $data === '1' || $data === true || $data === 1),
+            'integer', 'int' => (int)$data,
+            'double', 'float' => (float)$data,
+            'string' => (string)$data,
+            default => $data,
+        };
+    }
+
+    /**
      * @throws ValueError
      */
     protected static function _formatEnum(string $targetType, mixed $value): object
@@ -136,43 +192,6 @@ class Hydrator
             return constant($targetType . '::' . $value);
         }
     }
-
-    /**
-     * Создает класс из переданных данных
-     * Корректно обрабатывает как переменные конструктора, так и свойства класса (должны быть или публичными или явно поддерживаться через __set)
-     * Корректно обрабатывает вложенные классы, enum, массивы
-     * @param string $className
-     * @param mixed $jsonData данные в json формате
-     * @return object
-     * @throws ReflectionException
-     * @todo почему тут $className не может быть массивом - логично все перечисления убрать сюда и выровнять сигнатуру с createArrayFromData
-     * @deprecated
-     */
-    public static function createObjectFromData(string $className, object $jsonData): object
-    {
-        //особые кейсы встроенных классов
-        //@todo подумать как реализовать встроенные классы типа DateTime
-        if ($className === 'DateTime' && !empty($jsonData->scalar)) {
-            return new DateTime($jsonData->scalar);
-        }
-
-
-        return self::createObjectFromDefinition(
-            Definition\DefinitionGenerator::getClassDefinition($className),
-            $jsonData
-        );
-    }
-
-
-    public static function createArrayFromData(string $targetClassArr, array $jsonDataArray): array
-    {
-        $result = [];
-        foreach ($jsonDataArray as $item) {
-            $result[] = self::createObjectFromData($targetClassArr, $item);
-        }
-        return $result;
-    }
-
 
     /**
      * @todo странный класс, надо бы переделать на createArrayFromDefinition
@@ -249,25 +268,5 @@ class Hydrator
                 break;
         }
         return $tmp;
-    }
-
-    /**
-     * Конвертирует строку в нужный тип
-     * @param string $data
-     * @param string $targetType
-     * @return mixed
-     */
-    protected static function convertMixed(mixed $data, string $targetType): mixed
-    {
-        //@todo написать преобразователь array
-        //@todo кидать ошибку если это object/ resource / unknown type / null  https://www.php.net/manual/ru/function.gettype.php
-        //@todo поддерживать некоторые стандартные object, например DateTime
-        return match ($targetType) {
-            'boolean', 'bool' => ((is_string($data) && strtolower($data) === 'true') || $data === '1' || $data === true || $data === 1),
-            'integer', 'int' => (int)$data,
-            'double', 'float' => (float)$data,
-            'string' => (string)$data,
-            default => $data,
-        };
     }
 }

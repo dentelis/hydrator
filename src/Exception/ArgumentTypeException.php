@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Dentelis\Hydrator\Exception;
 
-class ArgumentTypeException extends \Exception
+use Exception;
+
+class ArgumentTypeException extends Exception
 {
     function __construct(string $message)
     {

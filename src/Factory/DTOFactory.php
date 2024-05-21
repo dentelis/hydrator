@@ -3,7 +3,7 @@
 namespace Dentelis\Hydrator\Factory;
 
 use Dentelis\Hydrator\Exception\RequiredArgumentException;
-use Dentelis\Hydrator\ObjectCreator;
+use Dentelis\Hydrator\Hydrator;
 
 class DTOFactory
 {
@@ -36,7 +36,7 @@ class DTOFactory
         if (is_array($jsonData)) {
             $jsonData = (object)$jsonData;
         }
-        return ObjectCreator::createObjectFromData(
+        return Hydrator::createObjectFromData(
             $this->className,
             $jsonData
         );

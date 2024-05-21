@@ -4,7 +4,7 @@ namespace Dentelis\Hydrator\Definition;
 
 enum DefinitionType
 {
-    case SIMPLE;
+    case SCALAR;
     case ARRAY;
     case OBJECT;
     case ENUM;

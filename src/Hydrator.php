@@ -3,34 +3,24 @@
 namespace Dentelis\Hydrator;
 
 use DateTime;
-use Dentelis\Hydrator\Attribute\ArrayTypeOf;
 use Dentelis\Hydrator\Definition\ArgDefinition;
 use Dentelis\Hydrator\Definition\ClassDefinition;
 use Dentelis\Hydrator\Definition\DefinitionType;
 use Dentelis\Hydrator\Exception\ArgumentTypeException;
 use Dentelis\Hydrator\Exception\RequiredArgumentException;
-use ReflectionAttribute;
-use ReflectionClass;
 use ReflectionEnum;
 use ReflectionException;
 use ReflectionParameter;
 use ReflectionProperty;
-use ReflectionUnionType;
 use Throwable;
 use ValueError;
 
 /**
- * @todo разделить создание класса и создание definition
  * @todo написать свои reflection property/parameter без косяков php
  * @todo refactor
  */
-class ObjectCreator
+class Hydrator
 {
-
-    /**
-     * @var ClassDefinition[];
-     */
-    static protected $definitionCache = [];
 
     protected static function createObjectFromDefinition(ClassDefinition $classDefinition, object $jsonData): object
     {
@@ -81,7 +71,7 @@ class ObjectCreator
     protected static function extractArgFromData(ArgDefinition $param, mixed $value)
     {
         switch ($param->definitionType) {
-            case DefinitionType::SIMPLE:
+            case DefinitionType::SCALAR:
                 return self::_formatSimple($param->argType, $value);
 
             case DefinitionType::ENUM:
@@ -129,7 +119,7 @@ class ObjectCreator
     protected static function _formatSimple(string $targetType, mixed $value): mixed
     {
         //@todo использовать gettype плохо, он возвращает устаревшие названия (например boolean вместо bool) - нужно везде перейти на reflection
-        return (gettype($value) !== 'NULL' && gettype($value) != $targetType) ? self::mixedToType($value, $targetType) : $value;
+        return (gettype($value) !== 'NULL' && gettype($value) != $targetType) ? self::convertMixed($value, $targetType) : $value;
     }
 
     /**
@@ -141,7 +131,7 @@ class ObjectCreator
         if ($enumReflection->isBacked()) {
             //если у него есть тип, у него есть и значения
             $innerType = $enumReflection->getBackingType()->getName();
-            return $targetType::from(self::mixedToType($value, $innerType));
+            return $targetType::from(self::convertMixed($value, $innerType));
         } else {
             return constant($targetType . '::' . $value);
         }
@@ -166,159 +156,9 @@ class ObjectCreator
 
 
         return self::createObjectFromDefinition(
-            self::getClassDefinition($className),
+            Definition\DefinitionGenerator::getClassDefinition($className),
             $jsonData
         );
-    }
-
-    /**
-     * Генерируем определение класса в формате удобном для генерации
-     * Используем кеш
-     */
-    protected static function getClassDefinition(string $className): ClassDefinition
-    {
-        if (isset(self::$definitionCache[$className])) {
-            return self::$definitionCache[$className];
-        }
-
-        //1. получаем класс reflection
-        $classReflection = new ReflectionClass($className);
-        $result = new ClassDefinition();
-        $result->reflection = $classReflection;
-
-        //2. пытаемся собрать данные для конструктора
-        $constructorReflection = $classReflection->getConstructor();
-        if ($constructorReflection) {
-
-            //сначала собираем типизацию массивов если она есть
-            $constructorArrayParametersType = [];
-            $constructorAttributes = $constructorReflection->getAttributes(ArrayTypeOf::class, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($constructorAttributes as $constructorAttribute) {
-                /**
-                 * @var ArrayTypeOf $attribute
-                 */
-                $attribute = $constructorAttribute->newInstance();
-                $constructorArrayParametersType[$attribute->param] = $attribute->targetClass;
-            }
-
-            $result->constructorArgs = [];
-            foreach ($constructorReflection->getParameters() as $parameterReflection) {
-                $result->constructorArgs[$parameterReflection->getName()] = self::createArgDefinitionFromReflection(
-                    $parameterReflection,
-                    $constructorArrayParametersType,
-                );
-            }
-        }
-
-        $propertiesReflection = $classReflection->getProperties();
-        foreach ($propertiesReflection as $propertyReflection) {
-            if ($propertyReflection->isStatic() || $propertyReflection->isPrivate() || $propertyReflection->isProtected()) {
-                //не переопределяем лишнее
-                continue;
-            }
-
-            $propertyName = $propertyReflection->getName();
-            if (isset($result->constructorArgs[$propertyName])) {
-                //пропускаем т.к уже задано через конструктор
-                continue;
-            }
-
-            $result->properties[] = self::createArgDefinitionFromReflection($propertyReflection);
-        }
-
-        self::$definitionCache[$className] = $result;
-
-        return $result;
-
-    }
-
-    protected static function createArgDefinitionFromReflection(
-        ReflectionProperty|ReflectionParameter $reflection,
-        ?array                                 $constructorArrayParametersType = null,
-    ): ArgDefinition
-    {
-
-        $tmp = new ArgDefinition();
-        $tmp->title = $reflection->getName();
-        $tmp->reflection = $reflection;
-
-        if ($reflection instanceof ReflectionProperty ? $reflection->hasDefaultValue() : $reflection->isDefaultValueAvailable()) {
-            $tmp->defaultValue = $reflection->getDefaultValue();
-            $tmp->mustBeOverwritten = false;
-        } elseif ($reflection instanceof ReflectionProperty ? $reflection->getType()->allowsNull() : $reflection->allowsNull()) {
-            $tmp->defaultValue = null;
-            $tmp->mustBeOverwritten = false;
-        } else {
-            $tmp->mustBeOverwritten = true;
-        }
-
-        if (!$reflection->hasType()) {
-            $tmp->definitionType = DefinitionType::SIMPLE;
-            $tmp->argType = 'mixed';
-        } else {
-            $type = $reflection->getType();
-            if ($type instanceof ReflectionUnionType) {
-                //@todo лютый говнокод, временное решение, нужно переделать
-                //текущий код вообще не умеет в union type нормально, поэтому приходится изображать жесткую типизацию на основе первого
-                $types = $type->getTypes();
-                $tmp->argType = [];
-                foreach ($types as $type) {
-                    $typeName = $type->getName();
-                    //@todo говнокод. определяем тип поля по последнему из union.
-                    //      будет ломаться если сделать объединение enum|object
-                    //      будет ломаться если будет любая типизация отличная от enum|enum|... или object|object|...
-                    if (enum_exists($typeName)) {
-                        $tmp->definitionType = DefinitionType::ENUM;
-                        $tmp->argType[] = $typeName;
-                    } else {
-                        $tmp->definitionType = DefinitionType::OBJECT;
-                        $tmp->argType[] = $typeName;
-                    }
-                }
-                return $tmp;
-            }
-
-            $type = $reflection->getType()->getName();
-            switch ($type) {
-                case 'int':
-                case 'bool':
-                case 'string':
-                case 'float':
-                case 'mixed':
-                    $tmp->definitionType = DefinitionType::SIMPLE;
-                    $tmp->argType = $type;
-                    break;
-                case 'array':
-                    $tmp->definitionType = DefinitionType::ARRAY;
-
-                    //определяем тип вложения в массив
-                    if ($reflection instanceof ReflectionProperty) {
-                        //это свойство класса
-                        $attribute = $reflection->getAttributes(ArrayTypeOf::class, ReflectionAttribute::IS_INSTANCEOF);
-                        if (count($attribute)) {
-                            $arrayTypeOfAttribute = $attribute[0]->newInstance();
-                            $tmp->argType = $arrayTypeOfAttribute->targetClass;
-                        } else {
-                            $tmp->argType = 'mixed';
-                        }
-                    } else {
-                        //это параметр конструктора
-                        $tmp->argType = $constructorArrayParametersType[$tmp->title] ?? 'mixed';
-                    }
-                    break;
-                default:
-                    //это вероятно класс или enum
-                    if (enum_exists($type)) {
-                        $tmp->definitionType = DefinitionType::ENUM;
-                        $tmp->argType = $type;
-                    } else {
-                        $tmp->definitionType = DefinitionType::OBJECT;
-                        $tmp->argType = $type;
-                    }
-                    break;
-            }
-        }
-        return $tmp;
     }
 
     /**
@@ -337,7 +177,7 @@ class ObjectCreator
             $targetClassArr = (is_array($targetClassArr)) ? $targetClassArr : [$targetClassArr];
             $definitionTypes = [];
             foreach ($targetClassArr as $targetClass) {
-                $definitionTypes[$targetClass] = self::getDefinitionTypeFromTargetClassname($targetClass);
+                $definitionTypes[$targetClass] = Definition\DefinitionGenerator::getDefinitionTypeFromTargetClassname($targetClass);
             }
             $lastClass = end($targetClassArr);
 
@@ -360,25 +200,13 @@ class ObjectCreator
 
         } else {
             //@todo тут стоит переписать как было (foreach element внутри switch) - сейчас мы делаем лишний switch для каждого элемента
-            $definitionType = self::getDefinitionTypeFromTargetClassname($targetClassArr);
+            $definitionType = Definition\DefinitionGenerator::getDefinitionTypeFromTargetClassname($targetClassArr);
             foreach ($jsonData as $item) {
                 $result[] = self::_createArrItem($definitionType, $targetClassArr, $item, $reflection);
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Определяет что собственно это такое
-     * @todo текущий код сломается на объединении типов
-     */
-    protected static function getDefinitionTypeFromTargetClassname(string $targetClass): DefinitionType
-    {
-        return match ($targetClass) {
-            'int', 'bool', 'string', 'float', 'mixed' => DefinitionType::SIMPLE,
-            default => enum_exists($targetClass) ? DefinitionType::ENUM : DefinitionType::OBJECT,
-        };
     }
 
     protected static function _createArrItem(DefinitionType $definitionType, string $targetClass, mixed $item, ReflectionParameter|ReflectionProperty $reflection): mixed
@@ -390,7 +218,7 @@ class ObjectCreator
                     is_object($item) ? $item : (object)$item,
                 );
                 break;
-            case DefinitionType::SIMPLE:
+            case DefinitionType::SCALAR:
                 $tmp = self::_formatSimple($targetClass, $item);
                 break;
             case DefinitionType::ENUM:
@@ -412,15 +240,15 @@ class ObjectCreator
     /**
      * Конвертирует строку в нужный тип
      * @param string $data
-     * @param string $type
+     * @param string $targetType
      * @return mixed
      */
-    protected static function mixedToType(mixed $data, string $type): mixed
+    protected static function convertMixed(mixed $data, string $targetType): mixed
     {
         //@todo написать преобразователь array
         //@todo кидать ошибку если это object/ resource / unknown type / null  https://www.php.net/manual/ru/function.gettype.php
         //@todo поддерживать некоторые стандартные object, например DateTime
-        return match ($type) {
+        return match ($targetType) {
             'boolean', 'bool' => ((is_string($data) && strtolower($data) === 'true') || $data === '1' || $data === true || $data === 1),
             'integer', 'int' => (int)$data,
             'double', 'float' => (float)$data,

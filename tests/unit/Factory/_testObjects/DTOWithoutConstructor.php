@@ -2,7 +2,7 @@
 
 namespace tests\unit\Factory\_testObjects;
 
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 use tests\unit\Factory\_testObjects\Enums\IntEnum;
 use tests\unit\Factory\_testObjects\Enums\StringEnum;
 

@@ -2,7 +2,7 @@
 
 namespace tests\unit\Factory\_testObjects\Broken;
 
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 
 class DTOUntypedArrayParameter
 {

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Lbaf\Container\Exception;
+namespace Dentelis\Hydrator\Exception;
 
 use ReflectionParameter;
 use ReflectionProperty;
 
-class InjectArrayTypeUnspecifiedException extends \Exception
+class ArrayTypeUnspecifiedException extends \Exception
 {
     function __construct(ReflectionParameter|ReflectionProperty $param)
     {

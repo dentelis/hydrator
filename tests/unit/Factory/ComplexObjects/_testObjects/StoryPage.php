@@ -2,8 +2,8 @@
 
 namespace tests\unit\Factory\ComplexObjects\_testObjects;
 
-use Lbaf\Factory\Attribute\ArrayTypeOf;
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Attribute\ArrayTypeOf;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 
 class StoryPage
 {

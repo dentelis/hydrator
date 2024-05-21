@@ -1,6 +1,6 @@
 <?php
 
-namespace Lbaf\Factory;
+namespace Dentelis\Hydrator\Factory;
 
 interface DTOFactoryTraitInterface
 {

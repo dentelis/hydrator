@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory\_traits;
 
-use Lbaf\Factory\DTOFactoryTraitInterface;
+use Dentelis\Hydrator\Factory\DTOFactoryTraitInterface;
 use PHPUnit\Framework\TestCase;
 
 trait CheckObjectTrait

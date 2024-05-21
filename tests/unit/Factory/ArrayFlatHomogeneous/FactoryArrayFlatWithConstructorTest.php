@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory\ArrayFlatHomogeneous;
 
-use Lbaf\Container\Exception\InjectRequiredArgumentException;
-use Lbaf\Factory\DTOFactory;
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Exception\RequiredArgumentException;
+use Dentelis\Hydrator\Factory\DTOFactory;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -64,7 +64,7 @@ final class FactoryArrayFlatWithConstructorTest extends TestCase
     public function testException(object $jsonData): void
     {
 
-        $this->expectException(InjectRequiredArgumentException::class);
+        $this->expectException(RequiredArgumentException::class);
         DTOArrayHomogeneousWithConstructor::getFactory()->createObject($jsonData);
 
     }

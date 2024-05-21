@@ -3,8 +3,8 @@
 namespace tests\unit\Factory\Datetime\Objects;
 
 use DateTime;
-use Lbaf\Factory\DTOFactoryTrait;
-use Lbaf\Factory\DTOFactoryTraitInterface;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\DTOFactoryTraitInterface;
 
 class DTODatetimeWithoutConstructor implements DTOFactoryTraitInterface
 {

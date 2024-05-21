@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Lbaf\Container\Exception;
+namespace Dentelis\Hydrator\Exception;
 
-class InjectArgumentTypeException extends \Exception
+class ArgumentTypeException extends \Exception
 {
     function __construct(string $message)
     {

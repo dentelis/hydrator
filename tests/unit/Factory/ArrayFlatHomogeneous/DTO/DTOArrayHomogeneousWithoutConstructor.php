@@ -2,8 +2,8 @@
 
 namespace tests\unit\Factory\ArrayFlatHomogeneous\DTO;
 
-use Lbaf\Factory\Attribute\ArrayTypeOf;
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Attribute\ArrayTypeOf;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 use tests\unit\Factory\_testObjects\DTOWithConstructor;
 use tests\unit\Factory\_testObjects\Enums\IntEnum;
 use tests\unit\Factory\_testObjects\Enums\StringEnum;

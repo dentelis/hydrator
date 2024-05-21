@@ -2,13 +2,13 @@
 
 namespace tests\unit\Factory\_testObjects;
 
-use Lbaf\Factory\DTOFactoryTrait;
-use tests\unit\Factory\_testObjects\Enums\UntypedEnum;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use tests\unit\Factory\_testObjects\Enums\UnbakedEnum;
 
 class DTOWithUntypedEn
 {
     use DTOFactoryTrait;
 
-    public UntypedEnum $enum;
+    public UnbakedEnum $enum;
 
 }

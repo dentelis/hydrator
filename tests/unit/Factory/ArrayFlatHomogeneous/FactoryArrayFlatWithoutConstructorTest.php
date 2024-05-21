@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory\ArrayFlatHomogeneous;
 
-use Lbaf\Container\Exception\InjectRequiredArgumentException;
-use Lbaf\Factory\DTOFactory;
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Exception\RequiredArgumentException;
+use Dentelis\Hydrator\Factory\DTOFactory;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use tests\unit\Factory\_testObjects\DTOWithConstructor;
 use tests\unit\Factory\_testObjects\Enums\IntEnum;
 use tests\unit\Factory\_testObjects\Enums\StringEnum;
-use tests\unit\Factory\_testObjects\Enums\UntypedEnum;
+use tests\unit\Factory\_testObjects\Enums\UnbakedEnum;
 use tests\unit\Factory\_traits\CheckObjectTrait;
 use tests\unit\Factory\ArrayFlatHomogeneous\DTO\DTOArrayHomogeneousUntypedEnumsWithoutConstructor;
 use tests\unit\Factory\ArrayFlatHomogeneous\DTO\DTOArrayHomogeneousWithoutConstructor;
@@ -64,7 +64,7 @@ final class FactoryArrayFlatWithoutConstructorTest extends TestCase
     public function testArrayUntypedEnum(): void
     {
         $instance = new DTOArrayHomogeneousUntypedEnumsWithoutConstructor();
-        $instance->untypedEnums = [UntypedEnum::GREEN];
+        $instance->untypedEnums = [UnbakedEnum::GREEN];
 
         $jsonData = (object)['untypedEnums' => ['GREEN']];
 
@@ -76,7 +76,7 @@ final class FactoryArrayFlatWithoutConstructorTest extends TestCase
     #[DataProvider('badProvider')]
     public function testException(object $jsonData): void
     {
-        $this->expectException(InjectRequiredArgumentException::class);
+        $this->expectException(RequiredArgumentException::class);
         DTOArrayHomogeneousUntypedEnumsWithoutConstructor::getFactory()->createObject($jsonData);
     }
 

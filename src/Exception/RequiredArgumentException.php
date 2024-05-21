@@ -1,12 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Lbaf\Container\Exception;
+namespace Dentelis\Hydrator\Exception;
 
 use ReflectionParameter;
 use ReflectionProperty;
 
-class InjectRequiredArgumentException extends \Exception
+/**
+ * @deprecated
+ * @todo разбить на более понятные исключения
+ */
+class RequiredArgumentException extends \Exception
 {
     function __construct(ReflectionParameter|ReflectionProperty $param)
     {

@@ -2,7 +2,7 @@
 
 namespace tests\unit\Factory\ArrayFlatHeterogeneous\DTO\Objects;
 
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 
 class CarDTO
 {

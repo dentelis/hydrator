@@ -2,7 +2,7 @@
 
 namespace tests\unit\Factory\_testObjects\Enums;
 
-enum UntypedEnum
+enum UnbakedEnum
 {
     case RED;
     case GREEN;

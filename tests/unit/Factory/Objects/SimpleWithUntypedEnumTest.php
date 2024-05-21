@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory\Objects;
 
-use Lbaf\Factory\DTOFactory;
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\DTOFactory;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use tests\unit\Factory\_testObjects\DTOWithUntypedEn;
-use tests\unit\Factory\_testObjects\Enums\UntypedEnum;
+use tests\unit\Factory\_testObjects\Enums\UnbakedEnum;
 use tests\unit\Factory\_traits\CheckObjectTrait;
 
 #[
@@ -23,7 +23,7 @@ final class SimpleWithUntypedEnumTest extends TestCase
     public function testUntypedEnum(): void
     {
         $instance = new DTOWithUntypedEn();
-        $instance->enum = UntypedEnum::GREEN;
+        $instance->enum = UnbakedEnum::GREEN;
 
         $jsonData = (object)['enum' => 'GREEN'];
 

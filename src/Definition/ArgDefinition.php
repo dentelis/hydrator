@@ -1,6 +1,6 @@
 <?php
 
-namespace Lbaf\Reflection\Definition;
+namespace Dentelis\Hydrator\Definition;
 
 use ReflectionParameter;
 use ReflectionProperty;

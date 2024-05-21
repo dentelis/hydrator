@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace tests\unit\Factory\Datetime;
 
 use DateTime;
-use Lbaf\Factory\DTOFactory;
-use Lbaf\Factory\DTOFactoryTrait;
-use Lbaf\Factory\DTOFactoryTraitInterface;
+use Dentelis\Hydrator\Factory\DTOFactory;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\DTOFactoryTraitInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

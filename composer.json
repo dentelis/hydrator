@@ -26,8 +26,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Dentelis\\Hydrator\\": "src/",
-      "Lbaf\\": "src/Lbaf"
+      "Dentelis\\Hydrator\\": "src/"
     }
   },
   "autoload-dev": {

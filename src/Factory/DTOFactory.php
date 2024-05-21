@@ -1,9 +1,9 @@
 <?php
 
-namespace Lbaf\Factory;
+namespace Dentelis\Hydrator\Factory;
 
-use Lbaf\Container\Exception\InjectRequiredArgumentException;
-use Lbaf\Reflection\ReflectionClassCreator;
+use Dentelis\Hydrator\Exception\RequiredArgumentException;
+use Dentelis\Hydrator\ObjectCreator;
 
 class DTOFactory
 {
@@ -29,14 +29,14 @@ class DTOFactory
      * Создает экземпляр объекта на основе данных в структуре $jsonData
      * @param object|array $jsonData структура описывающая объект. Массив будет преобразован в объект.
      * @return object
-     * @throws InjectRequiredArgumentException
+     * @throws RequiredArgumentException
      */
     public function createObject(object|array $jsonData): object
     {
         if (is_array($jsonData)) {
             $jsonData = (object)$jsonData;
         }
-        return ReflectionClassCreator::createClassFromData(
+        return ObjectCreator::createObjectFromData(
             $this->className,
             $jsonData
         );

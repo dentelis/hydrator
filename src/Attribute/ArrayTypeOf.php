@@ -1,6 +1,6 @@
 <?php
 
-namespace Lbaf\Factory\Attribute;
+namespace Dentelis\Hydrator\Attribute;
 
 use Attribute;
 

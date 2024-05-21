@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace tests\unit\Factory\Objects;
 
-use Lbaf\Factory\DTOFactory;
-use Lbaf\Factory\DTOFactoryTrait;
+use Dentelis\Hydrator\Factory\DTOFactory;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use tests\unit\Factory\_testObjects\DTOWithConstructorAndLogic;

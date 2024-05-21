@@ -2,15 +2,15 @@
 
 namespace tests\unit\Factory\ArrayFlatHomogeneous\DTO;
 
-use Lbaf\Factory\Attribute\ArrayTypeOf;
-use Lbaf\Factory\DTOFactoryTrait;
-use tests\unit\Factory\_testObjects\Enums\UntypedEnum;
+use Dentelis\Hydrator\Attribute\ArrayTypeOf;
+use Dentelis\Hydrator\Factory\DTOFactoryTrait;
+use tests\unit\Factory\_testObjects\Enums\UnbakedEnum;
 
 class DTOArrayHomogeneousUntypedEnumsWithoutConstructor
 {
     use DTOFactoryTrait;
 
-    #[ArrayTypeOf(UntypedEnum::class)]
+    #[ArrayTypeOf(UnbakedEnum::class)]
     public array $untypedEnums;
 
 

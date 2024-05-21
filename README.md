@@ -1,5 +1,5 @@
-# php-hydrator
-Extremely fast object and array hydrator with strict type matching
+# dentelis/hydrator
+Extremely fast object and array php hydrator with strict type matching, array typings, enums, union type etc
 
 ## Pros
  - really fast (add proofs!)

@@ -13,7 +13,7 @@ use ReflectionProperty;
  */
 class RequiredArgumentException extends Exception
 {
-    function __construct(ReflectionParameter|ReflectionProperty $param)
+    public function __construct(ReflectionParameter|ReflectionProperty $param)
     {
         parent::__construct('Required argument "' . $param->getName() . '" (' . $param->getType()->getName() . ') is missing or invalid');
     }

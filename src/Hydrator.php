@@ -9,6 +9,7 @@ use Dentelis\Hydrator\Definition\ClassDefinition;
 use Dentelis\Hydrator\Definition\DefinitionType;
 use Dentelis\Hydrator\Exception\ArgumentTypeException;
 use Dentelis\Hydrator\Exception\RequiredArgumentException;
+use Exception;
 use ReflectionEnum;
 use ReflectionException;
 use ReflectionParameter;
@@ -29,6 +30,7 @@ class Hydrator
         foreach ($jsonDataArray as $item) {
             $result[] = self::createObjectFromData($targetClassArr, $item);
         }
+
         return $result;
     }
 
@@ -36,9 +38,7 @@ class Hydrator
      * Создает класс из переданных данных
      * Корректно обрабатывает как переменные конструктора, так и свойства класса (должны быть или публичными или явно поддерживаться через __set)
      * Корректно обрабатывает вложенные классы, enum, массивы
-     * @param string $className
      * @param mixed $jsonData данные в json формате
-     * @return object
      * @throws ReflectionException
      * @todo почему тут $className не может быть массивом - логично все перечисления убрать сюда и выровнять сигнатуру с createArrayFromData
      * @deprecated
@@ -101,10 +101,11 @@ class Hydrator
                 $result[$param->title] = self::extractArgFromData($param, $jsonData->{$param->title});
             }
         }
+
         return $result;
     }
 
-    protected static function extractArgFromData(ArgDefinition $param, mixed $value)
+    protected static function extractArgFromData(ArgDefinition $param, mixed $value): mixed
     {
         switch ($param->definitionType) {
             case DefinitionType::SCALAR:
@@ -113,7 +114,7 @@ class Hydrator
             case DefinitionType::ENUM:
                 try {
                     return self::_formatEnum($param->argType, $value);
-                } catch (Throwable $e) {
+                } catch (Throwable) {
                     //не смогли найти такой - тут раньше был ValueError но почему-то он не кидается
                     throw new RequiredArgumentException($param->reflection);
                 }
@@ -136,7 +137,6 @@ class Hydrator
                             }
                         }
                     }
-
                 } else {
                     return self::createObjectFromData(
                         $param->argType,
@@ -144,27 +144,29 @@ class Hydrator
                     );
                 }
 
+                break;
+
             case DefinitionType::ARRAY:
                 if (!is_array($value)) {
                     throw new ArgumentTypeException($param->title . " must be an array");
                 }
+
                 return self::_createArrayFromData($param->argType, $value, $param->reflection);
         }
+
+        throw new Exception('unhandled error');
     }
 
     protected static function _formatSimple(string $targetType, mixed $value): mixed
     {
         //@todo использовать gettype плохо, он возвращает устаревшие названия (например boolean вместо bool) - нужно везде перейти на reflection
-        return (gettype($value) !== 'NULL' && gettype($value) != $targetType) ? self::convertMixed($value, $targetType) : $value;
+        return (gettype($value) !== 'NULL' && gettype($value) !== $targetType) ? self::convertMixed($value, $targetType) : $value;
     }
 
     /**
      * Конвертирует строку в нужный тип
-     * @param string $data
-     * @param string $targetType
-     * @return mixed
      */
-    protected static function convertMixed(mixed $data, string $targetType): mixed
+    protected static function convertMixed(string|int|bool|object|float $data, string $targetType): mixed
     {
         //@todo написать преобразователь array
         //@todo кидать ошибку если это object/ resource / unknown type / null  https://www.php.net/manual/ru/function.gettype.php
@@ -212,6 +214,7 @@ class Hydrator
             foreach ($targetClassArr as $targetClass) {
                 $definitionTypes[$targetClass] = Definition\DefinitionGenerator::getDefinitionTypeFromTargetClassname($targetClass);
             }
+
             $lastClass = end($targetClassArr);
 
             foreach ($jsonData as $item) {
@@ -226,6 +229,7 @@ class Hydrator
                             continue; //не надо писать в result
                         }
                     }
+
                     $result[] = $tmp;
                     break; //мы нашли подходящий класс, выход из foreach ($definitionTypes
                 }
@@ -257,16 +261,17 @@ class Hydrator
             case DefinitionType::ENUM:
                 try {
                     $tmp = self::_formatEnum($targetClass, $item);
-                } catch (Throwable $e) {
+                } catch (Throwable) {
                     //не смогли найти такой
                     throw new RequiredArgumentException($reflection);
                 }
+
                 break;
             default:
                 //@todo придумать новую ошибку
                 throw new RequiredArgumentException($targetClass);
-                break;
         }
+
         return $tmp;
     }
 }

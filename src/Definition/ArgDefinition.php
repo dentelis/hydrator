@@ -21,6 +21,8 @@ class ArgDefinition
     public string|array $argType;
 
     public mixed $defaultValue;
+
     public bool $mustBeOverwritten;
+
     public ReflectionProperty|ReflectionParameter $reflection;
 }

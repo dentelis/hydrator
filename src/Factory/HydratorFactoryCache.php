@@ -15,6 +15,7 @@ class HydratorFactoryCache
         if (!isset(self::$factoryCache[$className])) {
             self::$factoryCache[$className] = new HydratorFactory($className);
         }
+
         return self::$factoryCache[$className];
     }
 }

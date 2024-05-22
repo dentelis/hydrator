@@ -12,6 +12,7 @@ class ArrayTypeOf
      * @var string|string[]
      */
     public string|array $targetClass;
+
     public ?string $param = null;
 
     public function __construct(string|array $paramOrTargetClass, string|array|null $targetClass = null)

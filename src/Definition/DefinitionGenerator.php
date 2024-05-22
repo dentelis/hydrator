@@ -123,6 +123,7 @@ class DefinitionGenerator
                         $tmp->argType[] = $typeName;
                     }
                 }
+
                 return $tmp;
             }
 
@@ -143,7 +144,7 @@ class DefinitionGenerator
                     if ($reflection instanceof ReflectionProperty) {
                         //это свойство класса
                         $attribute = $reflection->getAttributes(ArrayTypeOf::class, ReflectionAttribute::IS_INSTANCEOF);
-                        if (count($attribute)) {
+                        if ($attribute !== []) {
                             $arrayTypeOfAttribute = $attribute[0]->newInstance();
                             $tmp->argType = $arrayTypeOfAttribute->targetClass;
                         } else {
@@ -153,6 +154,7 @@ class DefinitionGenerator
                         //это параметр конструктора
                         $tmp->argType = $constructorArrayParametersType[$tmp->title] ?? 'mixed';
                     }
+
                     break;
                 default:
                     //это вероятно класс или enum
@@ -163,9 +165,11 @@ class DefinitionGenerator
                         $tmp->definitionType = DefinitionType::OBJECT;
                         $tmp->argType = $type;
                     }
+
                     break;
             }
         }
+
         return $tmp;
     }
 

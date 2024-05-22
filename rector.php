@@ -8,7 +8,6 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRect
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
-        __DIR__ . '/tests',
     ])
     // uncomment to reach your current PHP version
     ->withPhpSets()
@@ -22,5 +21,5 @@ return RectorConfig::configure()
         instanceOf: true, //unclear
         earlyReturn: false, //need review
         strictBooleans: true,
-        carbon: true,
+        carbon: false, //https://carbon.nesbot.com/docs/
     );
